@@ -359,26 +359,6 @@ static int cb_scrlast(void *user, void *data) {
 	return true;
 }
 
-static int cb_scrlock(void *user, void *data) {
-	RConfigNode *node = (RConfigNode *) data;
-	bool running = true;
-	if (*node->value) {
-		r_cons_clear_buffer ();
-		r_cons_clear00 ();
-		r_cons_flush ();
-		do {
-			char *msg = r_cons_password ("Password: ");
-			if (!strcmp (msg, node->value)) {
-				running = false;
-			}
-			free (msg);
-		} while (running);
-		*node->value = 0;
-		r_cons_set_cup (true);
-	}
-	return true;
-}
-
 static int cb_scrrainbow(void *user, void *data) {
 	RCore *core = (RCore *) user;
 	RConfigNode *node = (RConfigNode *) data;
@@ -2573,7 +2553,6 @@ R_API int r_core_config_init(RCore *core) {
 	SETPREF ("asm.offset", "true", "Show offsets at disassembly");
 	SETCB ("scr.rainbow", "false", &cb_scrrainbow, "Shows rainbow colors depending of address");
 	SETCB ("scr.last", "true", &cb_scrlast, "Cache last output after flush to make _ command work (disable for performance)");
-	SETCB ("scr.lock", "", &cb_scrlock, "Lock the console with password protection");
 	SETPREF ("asm.reloff", "false", "Show relative offsets instead of absolute address in disasm");
 	SETPREF ("asm.reloff.flags", "false", "Show relative offsets to flags (not only functions)");
 	SETPREF ("asm.section", "false", "Show section name before offset");

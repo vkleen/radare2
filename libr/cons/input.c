@@ -561,12 +561,20 @@ R_API char *r_cons_password(const char *msg) {
 	tcsetattr (0, TCSANOW, &a->term_raw);
 #endif
 	while (i < sizeof (buf)) {
-		char ch = r_cons_readchar ();
+		int ch = r_cons_readchar ();
+		if (ch == 127) { // backspace
+			if (i < 1) {
+				break;
+			}
+			i--;
+			continue;
+		}
 		if (ch == '\r' || ch == '\n') {
 			break;
 		}
 		buf[i++] = ch;
 	}
+	buf[i] = 0;
 	r_cons_set_raw (0);
 	printf ("\n");
 	return strdup (buf);
