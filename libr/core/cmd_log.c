@@ -61,7 +61,7 @@ static void screenlock(RCore *core) {
 			eprintf ("Correct!\n");
 		} else {
 			r_sys_sleep (1);
-			eprintf ("Invalid passord.\n");
+			eprintf ("Invalid password.\n");
 		}
 		free (msg);
 	} while (running);
